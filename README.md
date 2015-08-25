@@ -1,0 +1,2 @@
+# yams
+Alexa → Yamaha receiver
