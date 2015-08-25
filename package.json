@@ -1,0 +1,27 @@
+{
+  "name": "yams",
+  "version": "0.1.0",
+  "description": "Alexa → Yamaha receiver",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erik/yams.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erik/yams/issues"
+  },
+  "homepage": "https://github.com/erik/yams",
+  "dependencies": {
+    "yamaha-nodejs": "^0.4.3"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.22",
+    "grunt": "^0.4.5",
+    "grunt-babel": "^5.0.1"
+  }
+}
