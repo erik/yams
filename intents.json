@@ -1,0 +1,18 @@
+{
+  "intents": [
+    {
+      "intent": "SetVolume",
+      "slots": [{"name": "Direction", "type": "LITERAL"}]
+    },
+
+    {
+      "intent": "SetInput",
+      "slots": [{"name": "Input", "type": "LITERAL"}]
+    },
+
+    {
+      "intent": "SetPowerState",
+      "slots": [{"name": "State", "type": "LITERAL"}]
+    }
+  ]
+}
