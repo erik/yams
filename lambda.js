@@ -45,7 +45,7 @@ function onIntent(intentRequest, session, callback) {
 
 function setPowerState(intent, session, callback) {
   var cardTitle = intent.name;
-  var stateSlot = intent.slots.Input.value;
+  var stateSlot = intent.slots.State.value;
 
   var speechOutput = "Powering receiver " + stateSlot;
   var postData = JSON.stringify({

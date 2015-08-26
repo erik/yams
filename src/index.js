@@ -3,7 +3,6 @@ require('babel-core/polyfill');
 var YamahaAPI = require('yamaha-nodejs');
 var receiver = new YamahaAPI('192.168.1.222');
 var restify = require('restify');
-var fs = require("fs");
 
 let server = restify.createServer({
   name: 'yamamahahamamahahamanamanamnamna',
@@ -12,7 +11,6 @@ let server = restify.createServer({
 
 function setVolume(req, res, next) {
   let {body: {direction}} = req;
-  direction = direction.toLowerCase();
 
   switch (direction.toLowerCase()) {
     case "up": {
@@ -39,11 +37,26 @@ function setInput(req, res, next) {
   return next();
 }
 
+function setState(req, res, next) {
+  let {body: {state}} = req;
+
+  console.log('Turning server ' + state);
+
+  if (state === "on")
+    receiver.powerOn();
+  else if (state === "off")
+    receiver.powerOff();
+
+  res.send(200);
+  return next();
+}
+
 
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 server.post("/volume", setVolume);
 server.post("/input", setInput);
+server.post("/state", setState);
 
 server.listen(8081, () => console.log("Listening..."));

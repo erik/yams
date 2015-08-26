@@ -11,7 +11,6 @@ SetVolume turn it {down|Direction} a bunch
 SetInput switch to {H. D. M. I.|Input}{one|Number}
 SetInput switch to {A. V. |Input}{one|Number}
 SetInput switch to {U. S. B. |Input}
-SetInput switch to {Spotify|Input}
 SetInput switch to {Audio|Input}{one|Number}
 SetPowerState turn {on|State}
 SetPowerState turn {off|State}
