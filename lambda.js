@@ -52,7 +52,7 @@ function setPowerState(intent, session, callback) {
     state: stateSlot
   });
 
-  postToServer("/state", postData, intent.name, speechOutput, '', callback)
+  postToServer("/state", postData, intent.name, speechOutput, '', callback);
 }
 
 function setInput(intent, session, callback) {
@@ -64,7 +64,7 @@ function setInput(intent, session, callback) {
     input: inputSlot
   });
 
-  postToServer("/input", postData, intent.name, speechOutput, '', callback)
+  postToServer("/input", postData, intent.name, speechOutput, '', callback);
 }
 
 function setVolume(intent, session, callback) {
@@ -76,7 +76,7 @@ function setVolume(intent, session, callback) {
     direction: directionSlot
   });
 
-  postToServer("/volume", postData, intent.name, speechOutput, '', callback)
+  postToServer("/volume", postData, intent.name, speechOutput, '', callback);
 }
 
 function postToServer(path, data, cardTitle, speechOutput, repromptText, callback) {
@@ -89,7 +89,8 @@ function postToServer(path, data, cardTitle, speechOutput, repromptText, callbac
       'Content-Type': 'application/json',
       'Content-Length': data.length
     }
-  }
+  };
+
   var req = http.request(opts, function(res) {
     console.log('STATUS: ' + res.statusCode);
     console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -108,7 +109,7 @@ function postToServer(path, data, cardTitle, speechOutput, repromptText, callbac
     console.log(err);
   });
 
-  console.log(data)
+  console.log(data);
   req.write(data);
 
   req.end();
@@ -132,7 +133,7 @@ function buildSpeechletResponse(title, output, repromptText) {
       }
     },
     shouldEndSession: true
-  }
+  };
 }
 
 function buildResponse(sessionAttributes, speechletResponse) {
@@ -140,5 +141,5 @@ function buildResponse(sessionAttributes, speechletResponse) {
     version: "1.0",
     sessionAttributes: sessionAttributes,
     response: speechletResponse
-  }
+  };
 }

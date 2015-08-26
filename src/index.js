@@ -1,4 +1,4 @@
-require('babel-core/polyfill')
+require('babel-core/polyfill');
 
 var YamahaAPI = require('yamaha-nodejs');
 var receiver = new YamahaAPI('192.168.1.222');
