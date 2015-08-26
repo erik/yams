@@ -30,9 +30,20 @@ function setVolume(req, res, next) {
   return next();
 }
 
+
+function setInput(req, res, next) {
+  let {body: {input, number}} = req;
+
+  console.log(input, number);
+  res.send(200);
+  return next();
+}
+
+
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 server.post("/volume", setVolume);
+server.post("/input", setInput);
 
 server.listen(8081, () => console.log("Listening..."));
