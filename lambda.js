@@ -58,10 +58,15 @@ function setPowerState(intent, session, callback) {
 function setInput(intent, session, callback) {
   var cardTitle = intent.name;
   var inputSlot = intent.slots.Input.value;
+  var numberSlot = intent.slots.Number.value;
 
   var speechOutput = "Setting input to " + inputSlot;
+
+  if (numberSlot) speechOutput += " " + numberSlot;
+
   var postData = JSON.stringify({
-    input: inputSlot
+    input: inputSlot,
+    number: numberSlot
   });
 
   postToServer("/input", postData, intent.name, speechOutput, '', callback);
