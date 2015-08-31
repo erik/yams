@@ -12,15 +12,17 @@ let server = restify.createServer({
 function setVolume(req, res, next) {
   let {body: {direction}} = req;
 
-  switch (direction.toLowerCase()) {
-    case "up": {
-      console.log("going up");
-      receiver.volumeUp(50);
-      break;
-    }
-    case "down": {
-      console.log("going down");
-      receiver.volumeDown(50);
+  if (direction && direction.length > 0) {
+    switch (direction.toLowerCase()) {
+      case "up": {
+        console.log("going up");
+        receiver.volumeUp(50);
+        break;
+      }
+      case "down": {
+        console.log("going down");
+        receiver.volumeDown(50);
+      }
     }
   }
 
