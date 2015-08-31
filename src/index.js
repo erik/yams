@@ -45,7 +45,7 @@ function setInput(req, res, next) {
         .catch(err => res.send(400))
         .done(next);
     } else {
-      console.log(`Input ${sanitized} not found...``);
+      console.log(`Input ${sanitized} not found...`);
       res.send(400);
       next();
     }
