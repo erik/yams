@@ -28,13 +28,28 @@ function setVolume(req, res, next) {
   return next();
 }
 
+function sanitizeInput(input, number) {
+  return `${input.replace(/\.|\s/g, '').toUpperCase()}${number}`
+}
 
 function setInput(req, res, next) {
   let {body: {input, number}} = req;
+  let sanitized = sanitizeInput(input, number);
+  let validInputs = receiver.getAvailableInputs();
 
-  console.log(input, number);
-  res.send(200);
-  return next();
+  validInputs.done(inputs => {
+    if (inputs.indexOf(sanitized) !== -1) {
+      console.log(`Switching input to ${sanitized}`);
+      receiver.setMainInputTo(sanitized)
+        .then(() => res.send(200))
+        .catch(err => res.send(400))
+        .done(next);
+    } else {
+      console.log(`Input ${sanitized} not found...``);
+      res.send(400);
+      next();
+    }
+  });
 }
 
 function setState(req, res, next) {
