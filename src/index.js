@@ -3,8 +3,6 @@ import YamahaAPI from 'yamaha-nodejs';
 import restify from 'restify';
 import {Client} from 'node-ssdp';
 
-var restify = require('restify');
-
 var server = restify.createServer({
   name: 'yams',
   version: '0.1.0'
@@ -120,11 +118,16 @@ server.post("/state", setState);
 
 var listening = true;
 var ssdpClient = new Client();
-var search = 'urn:schemas-upnp-org:service:RenderingControl:1';
+var search = 'urn:schemas-upnp-org:service:AVTransport:1';
 
-ssdpClient.on('response', (headers, statusCode, rinfo) {
-  if (!listening) {
+ssdpClient.on('response', (headers, statusCode, rinfo) => {
+  if (listening && headers.USN.endsWith(search)) {
     var reciever = rinfo.address;
-    server.listen(PORT, () => console.log("Listening..."));
+    listening = false;
+    server.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}, controlling reciever ${reciever}`)
+    });
   }
 });
+
+ssdpClient.search(search);
