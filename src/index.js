@@ -4,28 +4,57 @@ var YamahaAPI = require('yamaha-nodejs');
 var receiver = new YamahaAPI('192.168.1.222');
 var restify = require('restify');
 
-let server = restify.createServer({
+var server = restify.createServer({
   name: 'yamamahahamamahahamanamanamnamna',
   version: '1.0.0'
 });
 
+var err_msg = "I'm sorry, something went wrong";
+
+function err(res, text) {
+  return (err) => {
+    if (err) {
+      console.error(err.stack);
+      res.send(400, text);
+    }
+  }
+}
+
+function success(res, text) {
+  return () => {
+    console.log(text);
+    res.send(200, text);
+  }
+}
+
 function setVolume(req, res, next) {
   let {body: {direction}} = req;
 
-  switch (direction.toLowerCase()) {
-    case "up": {
-      console.log("going up");
-      receiver.volumeUp(50);
-      break;
-    }
-    case "down": {
-      console.log("going down");
-      receiver.volumeDown(50);
+  if (direction && direction.length > 0) {
+    switch (direction.toLowerCase()) {
+      case "up": {
+        console.log("going up");
+        receiver.volumeUp(50)
+          .then(success(res, "Going up"))
+          .catch(err(res, err_msg))
+          .done(next);
+        break;
+      }
+      case "down": {
+        console.log("going down");
+        receiver.volumeDown(50)
+          .then(success(res, "Going down"))
+          .catch(err(res, err_msg))
+          .done(next);
+        break;
+      }
+      default: {
+        err("Not sure about the direction of volume adjustment");
+        return next();
+
+      }
     }
   }
-
-  res.send(200);
-  return next();
 }
 
 function sanitizeInput(input, number) {
@@ -39,15 +68,16 @@ function setInput(req, res, next) {
 
   validInputs.done(inputs => {
     if (inputs.indexOf(sanitized) !== -1) {
-      console.log(`Switching input to ${sanitized}`);
+      let output = `Switching input to ${sanitized}`;
+      console.log(output);
       receiver.setMainInputTo(sanitized)
-        .then(() => res.send(200))
-        .catch(err => res.send(400))
+        .then(success(res, output))
+        .catch(err(res, err_msg))
         .done(next);
     } else {
-      console.log(`Input ${sanitized} not found...`);
-      res.send(400);
-      next();
+      let output = `Input ${sanitized} not found`;
+      err(output);
+      return next();
     }
   });
 }
@@ -57,13 +87,26 @@ function setState(req, res, next) {
 
   console.log('Turning server ' + state);
 
-  if (state === "on")
-    receiver.powerOn();
-  else if (state === "off")
-    receiver.powerOff();
-
-  res.send(200);
-  return next();
+  switch (state) {
+    case 'on': {
+      receiver.powerOn()
+        .then(success(res, "Powering on"))
+        .catch(err(res, err_msg))
+        .done(next)
+      break;
+    }
+    case 'off': {
+      receiver.powerOff()
+        .then(success(res, "Powering off"))
+        .catch(err(res, err_msg))
+        .done(next);
+      break;
+    }
+    default: {
+      err(res, err_msg);
+      return next();
+    }
+  }
 }
 
 

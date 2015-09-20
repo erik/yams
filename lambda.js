@@ -52,7 +52,7 @@ function setPowerState(intent, session, callback) {
     state: stateSlot
   });
 
-  postToServer("/state", postData, intent.name, speechOutput, '', callback);
+  postToServer("/state", postData, intent.name, callback);
 }
 
 function setInput(intent, session, callback) {
@@ -69,7 +69,7 @@ function setInput(intent, session, callback) {
     number: numberSlot
   });
 
-  postToServer("/input", postData, intent.name, speechOutput, '', callback);
+  postToServer("/input", postData, intent.name, callback);
 }
 
 function setVolume(intent, session, callback) {
@@ -81,20 +81,23 @@ function setVolume(intent, session, callback) {
     direction: directionSlot
   });
 
-  postToServer("/volume", postData, intent.name, speechOutput, '', callback);
+  postToServer("/volume", postData, intent.name, callback);
 }
 
-function postToServer(path, data, cardTitle, speechOutput, repromptText, callback) {
+function postToServer(path, data, cardTitle, callback) {
   var opts = {
-    "hostname": "<YOUR HOST HERE>",
+    "hostname": "",
     "port": 8081,
     "method": "POST",
     "path": path,
     "headers": {
       'Content-Type': 'application/json',
-      'Content-Length': data.length
+      'Content-Length': data.length,
+      'Accept': 'text/plain'
     }
   };
+
+  var output = "";
 
   var req = http.request(opts, function(res) {
     console.log('STATUS: ' + res.statusCode);
@@ -103,10 +106,11 @@ function postToServer(path, data, cardTitle, speechOutput, repromptText, callbac
 
     res.on('data', function (chunk) {
       console.log('BODY: ' + chunk);
+      output += chunk
     });
 
     res.on('end', function() {
-      callback({}, buildSpeechletResponse(cardTitle, speechOutput, repromptText));
+      callback({}, buildSpeechletResponse(cardTitle, output));
     });
   });
 
@@ -120,7 +124,7 @@ function postToServer(path, data, cardTitle, speechOutput, repromptText, callbac
   req.end();
 }
 
-function buildSpeechletResponse(title, output, repromptText) {
+function buildSpeechletResponse(title, output) {
   return {
     outputSpeech: {
       type: "PlainText",
@@ -128,14 +132,8 @@ function buildSpeechletResponse(title, output, repromptText) {
     },
     card: {
       type: "Simple",
-      title: "SessionSpeechlet - " + title,
-      content: "SessionSpeechlet - " + output
-    },
-    reprompt: {
-      outputSpeech: {
-        type: "PlainText",
-        text: repromptText
-      }
+      title: "Yams – " + title,
+      content: "Yams – " + output
     },
     shouldEndSession: true
   };
