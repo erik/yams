@@ -109,7 +109,7 @@ function postToServer(path, data, cardTitle, callback) {
     });
 
     res.on('end', function() {
-      callback({}, buildSpeechletResponse(cardTitle, output, ''));
+      callback({}, buildSpeechletResponse(cardTitle, output));
     });
   });
 
@@ -123,7 +123,7 @@ function postToServer(path, data, cardTitle, callback) {
   req.end();
 }
 
-function buildSpeechletResponse(title, output, repromptText) {
+function buildSpeechletResponse(title, output) {
   return {
     outputSpeech: {
       type: "PlainText",
@@ -131,14 +131,8 @@ function buildSpeechletResponse(title, output, repromptText) {
     },
     card: {
       type: "Simple",
-      title: "SessionSpeechlet - " + title,
-      content: "SessionSpeechlet - " + output
-    },
-    reprompt: {
-      outputSpeech: {
-        type: "PlainText",
-        text: repromptText
-      }
+      title: "Yams – " + title,
+      content: "Yams – " + output
     },
     shouldEndSession: true
   };
