@@ -27,6 +27,24 @@ function success(res, text) {
   }
 }
 
+var err_msg = "I'm sorry, something went wrong";
+
+function err(res, text) {
+  return (err) => {
+    if (err) {
+      console.error(err.stack);
+      res.send(400, text);
+    }
+  }
+}
+
+function success(res, text) {
+  return () => {
+    console.log(text);
+    res.send(200, text);
+  }
+}
+
 function setVolume(req, res, next) {
   let {body: {direction}} = req;
 
