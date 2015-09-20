@@ -90,7 +90,9 @@ function setVolume(req, res, next) {
 }
 
 function sanitizeInput(input, number) {
-  return `${input.replace(/\.|\s/g, '').toUpperCase()}${number}`
+  if (input) {
+    return `${input.replace(/\.|\s/g, '').toUpperCase()}${number}`;
+  }
 }
 
 function setInput(req, res, next) {
@@ -98,20 +100,27 @@ function setInput(req, res, next) {
   let sanitized = sanitizeInput(input, number);
   let validInputs = receiver.getAvailableInputs();
 
-  validInputs.done(inputs => {
-    if (inputs.indexOf(sanitized) !== -1) {
-      let output = `Switching input to ${input} ${number}`;
-      console.log(output);
-      receiver.setMainInputTo(sanitized)
-        .then(success(res, output))
-        .catch(err(res, err_msg))
-        .done(next);
-    } else {
-      let output = `Input ${sanitized} not found`;
-      err(output);
-      return next();
-    }
-  });
+  if (sanitized) {
+    validInputs.done(inputs => {
+      if (inputs.indexOf(sanitized) !== -1) {
+        let output = `Switching input to ${input} ${number}`;
+        console.log(output);
+        receiver.setMainInputTo(sanitized)
+          .then(success(res, output))
+          .catch(err(res, err_msg))
+          .done(next);
+      } else {
+        let output = `Input ${sanitized} not found`;
+        err(output);
+        return next();
+      }
+    });
+  } else {
+    let msg = "I didn't catch that input";
+    console.log(msg);
+    res.send(400, msg);
+    return next();
+  }
 }
 
 function setState(req, res, next) {
