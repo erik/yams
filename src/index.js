@@ -8,7 +8,7 @@ var server = restify.createServer({
   version: '0.1.0'
 });
 
-var reciever;
+var receiver;
 var PORT = process.env.PORT || 8081;
 var err_msg = "I'm sorry, something went wrong";
 
@@ -87,7 +87,7 @@ function setInput(req, res, next) {
 
   validInputs.done(inputs => {
     if (inputs.indexOf(sanitized) !== -1) {
-      let output = `Switching input to ${sanitized}`;
+      let output = `Switching input to ${input} ${number}`;
       console.log(output);
       receiver.setMainInputTo(sanitized)
         .then(success(res, output))
@@ -141,10 +141,10 @@ var search = 'urn:schemas-upnp-org:service:AVTransport:1';
 
 ssdpClient.on('response', (headers, statusCode, rinfo) => {
   if (listening && headers.USN.endsWith(search)) {
-    reciever = rinfo.address;
+    receiver = new YamahaAPI(rinfo.address);
     listening = false;
     server.listen(PORT, () => {
-      console.log(`Listening on port ${PORT}, controlling reciever ${reciever}`)
+      console.log(`Listening on port ${PORT}, controlling ${rinfo.address}`)
     });
   }
 });
