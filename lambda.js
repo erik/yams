@@ -92,7 +92,8 @@ function postToServer(path, data, cardTitle, callback) {
     "path": path,
     "headers": {
       'Content-Type': 'application/json',
-      'Content-Length': data.length
+      'Content-Length': data.length,
+      'Accept': 'text/plain'
     }
   };
 
