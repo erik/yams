@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/erik/yams",
   "dependencies": {
+    "node-ssdp": "^2.5.1",
     "restify": "^4.0.0",
     "yamaha-nodejs": "^0.4.3"
   },
