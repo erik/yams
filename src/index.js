@@ -1,13 +1,31 @@
-require('babel-core/polyfill');
-
-var YamahaAPI = require('yamaha-nodejs');
-var receiver = new YamahaAPI('192.168.1.222');
-var restify = require('restify');
+import 'babel-core/polyfill';
+import YamahaAPI from 'yamaha-nodejs';
+import restify from 'restify';
+import {Client} from 'node-ssdp';
 
 var server = restify.createServer({
-  name: 'yamamahahamamahahamanamanamnamna',
-  version: '1.0.0'
+  name: 'yams',
+  version: '0.1.0'
 });
+
+var PORT = process.env.PORT || 8081;
+var err_msg = "I'm sorry, something went wrong";
+
+function err(res, text) {
+  return (err) => {
+    if (err) {
+      console.error(err.stack);
+      res.send(400, text);
+    }
+  }
+}
+
+function success(res, text) {
+  return () => {
+    console.log(text);
+    res.send(200, text);
+  }
+}
 
 var err_msg = "I'm sorry, something went wrong";
 
@@ -109,7 +127,6 @@ function setState(req, res, next) {
   }
 }
 
-
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
@@ -117,4 +134,18 @@ server.post("/volume", setVolume);
 server.post("/input", setInput);
 server.post("/state", setState);
 
-server.listen(8081, () => console.log("Listening..."));
+var listening = true;
+var ssdpClient = new Client();
+var search = 'urn:schemas-upnp-org:service:AVTransport:1';
+
+ssdpClient.on('response', (headers, statusCode, rinfo) => {
+  if (listening && headers.USN.endsWith(search)) {
+    var reciever = rinfo.address;
+    listening = false;
+    server.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}, controlling reciever ${reciever}`)
+    });
+  }
+});
+
+ssdpClient.search(search);
