@@ -1,18 +1,17 @@
-SetVolume turn it {up|Direction}
-SetVolume turn it {down|Direction}
-SetVolume turn {up|Direction}
-SetVolume turn {down|Direction}
-SetVolume turn {up|Direction} the volume
-SetVolume turn {down|Direction} the volume
-SetVolume turn it {up|Direction} a lot
-SetVolume turn it {down|Direction} a lot
-SetVolume turn it {up|Direction} a bunch
-SetVolume turn it {down|Direction} a bunch
-SetInput switch to {H. D. M. I.|Input}{one|Number}
-SetInput switch to {A. V. |Input}{one|Number}
-SetInput switch to {U. S. B. |Input}
-SetInput switch to {Audio|Input}{one|Number}
-SetPowerState turn {on|State}
-SetPowerState turn {off|State}
-SetPowerState power {on|State}
-SetPowerState power {off|State}
+SetVolume turn it {up,down|Direction}
+SetVolume turn {up,down|Direction}
+SetVolume turn {up,down|Direction} the volume
+SetVolume turn it {up,down|Direction} a lot
+SetVolume turn it {up,down|Direction} a bunch
+SetInput switch to {H. D. M. I.|Input} {one,two,three,four|Number}
+SetInput switch to {A. V.|Input} {one,two,three,four,five,six|Number}
+SetInput switch to {U. S. B.|Input}
+SetInput switch to {Audio|Input} {one,two|Number}
+SetInput switch to {Spotify|Input}
+SetInput switch inputs to {H. D. M. I.|Input} {one,two,three,four|Number}
+SetInput switch inputs to {A. V.|Input} {one,two,three,four,five,six|Number}
+SetInput switch inputs to {U. S. B.|Input}
+SetInput switch inputs to {Audio|Input} {one,two|Number}
+SetInput switch inputs to {Spotify|Input}
+SetPowerState turn {on,off|State}
+SetPowerState power {on,off|State}
