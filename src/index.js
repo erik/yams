@@ -8,6 +8,7 @@ var server = restify.createServer({
   version: '0.1.0'
 });
 
+var reciever;
 var PORT = process.env.PORT || 8081;
 var err_msg = "I'm sorry, something went wrong";
 
@@ -140,7 +141,7 @@ var search = 'urn:schemas-upnp-org:service:AVTransport:1';
 
 ssdpClient.on('response', (headers, statusCode, rinfo) => {
   if (listening && headers.USN.endsWith(search)) {
-    var reciever = rinfo.address;
+    reciever = rinfo.address;
     listening = false;
     server.listen(PORT, () => {
       console.log(`Listening on port ${PORT}, controlling reciever ${reciever}`)
