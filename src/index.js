@@ -41,10 +41,11 @@ function setInput(req, res, next) {
 
   validInputs.done(inputs => {
     if (inputs.indexOf(sanitized) !== -1) {
-      console.log(`Switching input to ${sanitized}`);
+      var output = `Switching input to ${sanitized}`;
+      console.log(output);
       receiver.setMainInputTo(sanitized)
-        .then(() => res.send(200))
-        .catch(err => res.send(400))
+        .then(() => res.send(200, output))
+        .catch(err => res.send(400, "Something went wrong"))
         .done(next);
     } else {
       console.log(`Input ${sanitized} not found...`);
