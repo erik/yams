@@ -48,8 +48,8 @@ function success(res, text) {
 
 function setVolume(req, res, next) {
   let {body: {direction, modifier}} = req;
-  let upResp = "Going up"
-  let downResp = "Going down"
+  let upResp = "Turning it up"
+  let downResp = "Turning it down"
 
   if (modifier === "a lot" || modifier === "a bunch") {
     var amount = 100;
@@ -57,8 +57,8 @@ function setVolume(req, res, next) {
     downResp += ` ${modifier}`;
   } else if (modifier === "way") {
     var amount = 100;
-    upResp = "Going way up";
-    downResp = "Going way down";
+    upResp = "Turning it way up";
+    downResp = "Turning it way down";
   } else {
     var amount = 50;
   }
