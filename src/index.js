@@ -47,22 +47,36 @@ function success(res, text) {
 }
 
 function setVolume(req, res, next) {
-  let {body: {direction}} = req;
+  let {body: {direction, modifier}} = req;
+  let upResp = "Going up"
+  let downResp = "Going down"
+
+  if (modifier === "a lot" || modifier === "a bunch") {
+    var amount = 100;
+    upResp += ` ${modifier}`;
+    downResp += ` ${modifier}`;
+  } else if (modifier === "way") {
+    var amount = 100;
+    upResp = "Going way up";
+    downResp = "Going way down";
+  } else {
+    var amount = 50;
+  }
 
   if (direction && direction.length > 0) {
     switch (direction.toLowerCase()) {
       case "up": {
         console.log("going up");
-        receiver.volumeUp(50)
-          .then(success(res, "Going up"))
+        receiver.volumeUp(amount)
+          .then(success(res, upResp))
           .catch(err(res, err_msg))
           .done(next);
         break;
       }
       case "down": {
         console.log("going down");
-        receiver.volumeDown(50)
-          .then(success(res, "Going down"))
+        receiver.volumeDown(amount)
+          .then(success(res, downResp))
           .catch(err(res, err_msg))
           .done(next);
         break;
@@ -70,7 +84,6 @@ function setVolume(req, res, next) {
       default: {
         err("Not sure about the direction of volume adjustment");
         return next();
-
       }
     }
   }
