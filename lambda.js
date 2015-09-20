@@ -75,10 +75,17 @@ function setInput(intent, session, callback) {
 function setVolume(intent, session, callback) {
   var cardTitle = intent.name;
   var directionSlot = intent.slots.Direction.value;
+  var modifierSlot = intent.slots.Modifier.value;
 
-  var speechOutput = "Turning volume " + directionSlot;
+  if (modifierSlot) {
+    var speechOutput = "Turning volume " + directionSlot + " " + modifierSlot
+  } else {
+    var speechOutput = "Turning volume " + directionSlot;
+  }
+
   var postData = JSON.stringify({
-    direction: directionSlot
+    direction: directionSlot,
+    modifier: modifierSlot
   });
 
   postToServer("/volume", postData, intent.name, callback);

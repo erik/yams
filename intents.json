@@ -2,7 +2,8 @@
   "intents": [
     {
       "intent": "SetVolume",
-      "slots": [{"name": "Direction", "type": "LITERAL"}]
+      "slots": [{"name": "Direction", "type": "LITERAL"},
+                {"name": "Modifier", "type": "LITERAL"}]
     },
 
     {

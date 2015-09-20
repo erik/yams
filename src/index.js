@@ -8,6 +8,7 @@ var server = restify.createServer({
   version: '0.1.0'
 });
 
+var receiver;
 var PORT = process.env.PORT || 8081;
 var err_msg = "I'm sorry, something went wrong";
 
@@ -46,22 +47,36 @@ function success(res, text) {
 }
 
 function setVolume(req, res, next) {
-  let {body: {direction}} = req;
+  let {body: {direction, modifier}} = req;
+  let upResp = "Going up"
+  let downResp = "Going down"
+
+  if (modifier === "a lot" || modifier === "a bunch") {
+    var amount = 100;
+    upResp += ` ${modifier}`;
+    downResp += ` ${modifier}`;
+  } else if (modifier === "way") {
+    var amount = 100;
+    upResp = "Going way up";
+    downResp = "Going way down";
+  } else {
+    var amount = 50;
+  }
 
   if (direction && direction.length > 0) {
     switch (direction.toLowerCase()) {
       case "up": {
         console.log("going up");
-        receiver.volumeUp(50)
-          .then(success(res, "Going up"))
+        receiver.volumeUp(amount)
+          .then(success(res, upResp))
           .catch(err(res, err_msg))
           .done(next);
         break;
       }
       case "down": {
         console.log("going down");
-        receiver.volumeDown(50)
-          .then(success(res, "Going down"))
+        receiver.volumeDown(amount)
+          .then(success(res, downResp))
           .catch(err(res, err_msg))
           .done(next);
         break;
@@ -69,7 +84,6 @@ function setVolume(req, res, next) {
       default: {
         err("Not sure about the direction of volume adjustment");
         return next();
-
       }
     }
   }
@@ -86,7 +100,7 @@ function setInput(req, res, next) {
 
   validInputs.done(inputs => {
     if (inputs.indexOf(sanitized) !== -1) {
-      let output = `Switching input to ${sanitized}`;
+      let output = `Switching input to ${input} ${number}`;
       console.log(output);
       receiver.setMainInputTo(sanitized)
         .then(success(res, output))
@@ -140,10 +154,10 @@ var search = 'urn:schemas-upnp-org:service:AVTransport:1';
 
 ssdpClient.on('response', (headers, statusCode, rinfo) => {
   if (listening && headers.USN.endsWith(search)) {
-    var reciever = rinfo.address;
+    receiver = new YamahaAPI(rinfo.address);
     listening = false;
     server.listen(PORT, () => {
-      console.log(`Listening on port ${PORT}, controlling reciever ${reciever}`)
+      console.log(`Listening on port ${PORT}, controlling ${rinfo.address}`)
     });
   }
 });

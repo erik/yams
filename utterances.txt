@@ -1,8 +1,8 @@
 SetVolume turn it {up,down|Direction}
 SetVolume turn {up,down|Direction}
 SetVolume turn {up,down|Direction} the volume
-SetVolume turn it {up,down|Direction} a lot
-SetVolume turn it {up,down|Direction} a bunch
+SetVolume turn it {up,down|Direction} {a lot,a bunch|Modifier}
+SetVolume turn it {way|Modifier} {up,down|Direction}
 SetInput switch to {H. D. M. I.|Input} {one,two,three,four|Number}
 SetInput switch to {A. V.|Input} {one,two,three,four,five,six|Number}
 SetInput switch to {U. S. B.|Input}
