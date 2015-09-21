@@ -108,8 +108,6 @@ function setInput(req, res, next) {
     input = mapped;
   }
 
-  input = mapped || sanitized;
-
   if (input) {
     validInputs.done(inputs => {
       if (inputs.indexOf(input) !== -1) {
