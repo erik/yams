@@ -1,0 +1,8 @@
+{
+  "Chromecast": "HDMI1",
+  "Playstation": "HDMI2",
+  "Auxiliary": "V-AUX",
+  "Turntable": "AV1",
+  "Nintendo": "AV2",
+  "External Hard Drive": "USB"
+}

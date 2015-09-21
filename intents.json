@@ -17,6 +17,11 @@
     {
       "intent": "SetPowerState",
       "slots": [{"name": "State", "type": "LITERAL"}]
+    },
+
+    {
+      "intent": "WhatsTheYams",
+      "slots": []
     }
   ]
 }

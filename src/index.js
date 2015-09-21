@@ -2,6 +2,7 @@ import 'babel-core/polyfill';
 import YamahaAPI from 'yamaha-nodejs';
 import restify from 'restify';
 import {Client} from 'node-ssdp';
+import {mappings} from './utterances';
 
 var server = restify.createServer({
   name: 'yams',
@@ -10,7 +11,7 @@ var server = restify.createServer({
 
 var receiver;
 var PORT = process.env.PORT || 8081;
-var err_msg = "I'm sorry, something went wrong";
+var errMsg = "I'm sorry, something went wrong";
 
 function err(res, text) {
   return (err) => {
@@ -28,13 +29,15 @@ function success(res, text) {
   }
 }
 
-var err_msg = "I'm sorry, something went wrong";
+var errMsg = "I'm sorry, something went wrong";
 
 function err(res, text) {
   return (err) => {
     if (err) {
-      console.error(err.stack);
+      console.error(err.stack || err);
       res.send(400, text);
+    } else {
+      res.send(400, "An unknown error occurred");
     }
   }
 }
@@ -69,7 +72,7 @@ function setVolume(req, res, next) {
         console.log("going up");
         receiver.volumeUp(amount)
           .then(success(res, upResp))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
         break;
       }
@@ -77,7 +80,7 @@ function setVolume(req, res, next) {
         console.log("going down");
         receiver.volumeDown(amount)
           .then(success(res, downResp))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
         break;
       }
@@ -91,27 +94,39 @@ function setVolume(req, res, next) {
 
 function sanitizeInput(input, number) {
   if (input) {
-    return `${input.replace(/\.|\s/g, '').toUpperCase()}${number}`;
+    return `${input.replace(/\.|\s/g, '').toUpperCase()}${number || ''}`;
   }
 }
 
 function setInput(req, res, next) {
   let {body: {input, number}} = req;
-  let sanitized = sanitizeInput(input, number);
+  let originalIn = input || '';
+  let mapped = mappings[originalIn.toLowerCase()];
   let validInputs = receiver.getAvailableInputs();
 
-  if (sanitized) {
+  if (!mapped && input.length) {
+    input = sanitizeInput(input, number);
+  } else {
+    input = mapped;
+  }
+
+  if (input) {
     validInputs.done(inputs => {
-      if (inputs.indexOf(sanitized) !== -1) {
-        let output = `Switching input to ${input} ${number}`;
-        console.log(output);
-        receiver.setMainInputTo(sanitized)
+      if (inputs.indexOf(input) !== -1) {
+        var output;
+        if (mapped) {
+          output = `Switching input to ${originalIn} (${input})`;
+        } else {
+          output = `Switching input to ${input}`;
+        }
+
+        receiver.setMainInputTo(input)
           .then(success(res, output))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
       } else {
-        let output = `Input ${sanitized} not found`;
-        err(output);
+        let output = `Input ${input} not found`;
+        err(res, output)(output);
         return next();
       }
     });
@@ -132,22 +147,29 @@ function setState(req, res, next) {
     case 'on': {
       receiver.powerOn()
         .then(success(res, "Powering on"))
-        .catch(err(res, err_msg))
+        .catch(err(res, errMsg))
         .done(next)
       break;
     }
     case 'off': {
       receiver.powerOff()
         .then(success(res, "Powering off"))
-        .catch(err(res, err_msg))
+        .catch(err(res, errMsg))
         .done(next);
       break;
     }
     default: {
-      err(res, err_msg);
+      err(res, errMsg);
       return next();
     }
   }
+}
+
+function whatsTheYams(req, res, next) {
+  let msg = "The yams is the power that be! You can smell it when I'm walking down the street.";
+  console.log(msg);
+  res.send(200, msg);
+  return next();
 }
 
 server.use(restify.queryParser());
@@ -156,6 +178,7 @@ server.use(restify.bodyParser());
 server.post("/volume", setVolume);
 server.post("/input", setInput);
 server.post("/state", setState);
+server.post("/whatstheyams", whatsTheYams);
 
 var listening = true;
 var ssdpClient = new Client();
