@@ -11,7 +11,7 @@ var server = restify.createServer({
 
 var receiver;
 var PORT = process.env.PORT || 8081;
-var err_msg = "I'm sorry, something went wrong";
+var errMsg = "I'm sorry, something went wrong";
 
 function err(res, text) {
   return (err) => {
@@ -29,7 +29,7 @@ function success(res, text) {
   }
 }
 
-var err_msg = "I'm sorry, something went wrong";
+var errMsg = "I'm sorry, something went wrong";
 
 function err(res, text) {
   return (err) => {
@@ -70,7 +70,7 @@ function setVolume(req, res, next) {
         console.log("going up");
         receiver.volumeUp(amount)
           .then(success(res, upResp))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
         break;
       }
@@ -78,7 +78,7 @@ function setVolume(req, res, next) {
         console.log("going down");
         receiver.volumeDown(amount)
           .then(success(res, downResp))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
         break;
       }
@@ -122,7 +122,7 @@ function setInput(req, res, next) {
 
         receiver.setMainInputTo(input)
           .then(success(res, output))
-          .catch(err(res, err_msg))
+          .catch(err(res, errMsg))
           .done(next);
       } else {
         let output = `Input ${input} not found`;
@@ -147,19 +147,19 @@ function setState(req, res, next) {
     case 'on': {
       receiver.powerOn()
         .then(success(res, "Powering on"))
-        .catch(err(res, err_msg))
+        .catch(err(res, errMsg))
         .done(next)
       break;
     }
     case 'off': {
       receiver.powerOff()
         .then(success(res, "Powering off"))
-        .catch(err(res, err_msg))
+        .catch(err(res, errMsg))
         .done(next);
       break;
     }
     default: {
-      err(res, err_msg);
+      err(res, errMsg);
       return next();
     }
   }
