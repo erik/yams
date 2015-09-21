@@ -6,15 +6,10 @@ exports.handler = function (event, context) {
   try {
     console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-    /**
-     * Uncomment this if statement and populate with your skill's application ID to
-     * prevent someone else from configuring a skill that sends requests to this function.
-     */
-    /*
-      if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.[unique-value-here]") {
-      context.fail("Invalid Application ID");
-      }
-    */
+    // if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.amzn1.echo-sdk-ams.app.<applicationId>") {
+    //  context.fail("Invalid Application ID");
+    // }
+
 
     if (event.request.type === "LaunchRequest") {
     }  else if (event.request.type === "IntentRequest") {
