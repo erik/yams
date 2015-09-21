@@ -2,6 +2,7 @@ import 'babel-core/polyfill';
 import YamahaAPI from 'yamaha-nodejs';
 import restify from 'restify';
 import {Client} from 'node-ssdp';
+import {mappings} from './utterances';
 
 var server = restify.createServer({
   name: 'yams',
@@ -97,20 +98,34 @@ function sanitizeInput(input, number) {
 
 function setInput(req, res, next) {
   let {body: {input, number}} = req;
-  let sanitized = sanitizeInput(input, number);
+  let originalIn = input;
+  let mapped = mappings[input];
   let validInputs = receiver.getAvailableInputs();
 
-  if (sanitized) {
+  if (!mapped) {
+    input = sanitizeInput(input, number);
+  } else {
+    input = mapped;
+  }
+
+  input = mapped || sanitized;
+
+  if (input) {
     validInputs.done(inputs => {
-      if (inputs.indexOf(sanitized) !== -1) {
-        let output = `Switching input to ${input} ${number}`;
-        console.log(output);
-        receiver.setMainInputTo(sanitized)
+      if (inputs.indexOf(input) !== -1) {
+        var output;
+        if (mapped) {
+          output = `Switching input to ${originalIn} (${input})`;
+        } else {
+          output = `Switching input to ${input}`;
+        }
+
+        receiver.setMainInputTo(input)
           .then(success(res, output))
           .catch(err(res, err_msg))
           .done(next);
       } else {
-        let output = `Input ${sanitized} not found`;
+        let output = `Input ${input} not found`;
         err(output);
         return next();
       }
@@ -150,12 +165,20 @@ function setState(req, res, next) {
   }
 }
 
+function whatsTheYams(req, res, next) {
+  let msg = "The yams is the power that be! You can smell it when I'm walking down the street.";
+  console.log(msg);
+  res.send(200, msg);
+  return next();
+}
+
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 server.post("/volume", setVolume);
 server.post("/input", setInput);
 server.post("/state", setState);
+server.post("/whatstheyams", whatsTheYams);
 
 var listening = true;
 var ssdpClient = new Client();
