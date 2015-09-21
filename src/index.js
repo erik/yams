@@ -34,8 +34,10 @@ var errMsg = "I'm sorry, something went wrong";
 function err(res, text) {
   return (err) => {
     if (err) {
-      console.error(err.stack);
+      console.error(err.stack || err);
       res.send(400, text);
+    } else {
+      res.send(400, "An unknown error occurred");
     }
   }
 }
@@ -92,17 +94,17 @@ function setVolume(req, res, next) {
 
 function sanitizeInput(input, number) {
   if (input) {
-    return `${input.replace(/\.|\s/g, '').toUpperCase()}${number}`;
+    return `${input.replace(/\.|\s/g, '').toUpperCase()}${number || ''}`;
   }
 }
 
 function setInput(req, res, next) {
   let {body: {input, number}} = req;
-  let originalIn = input;
-  let mapped = mappings[input];
+  let originalIn = input || '';
+  let mapped = mappings[originalIn.toLowerCase()];
   let validInputs = receiver.getAvailableInputs();
 
-  if (!mapped) {
+  if (!mapped && input.length) {
     input = sanitizeInput(input, number);
   } else {
     input = mapped;
@@ -124,7 +126,7 @@ function setInput(req, res, next) {
           .done(next);
       } else {
         let output = `Input ${input} not found`;
-        err(output);
+        err(res, output)(output);
         return next();
       }
     });
