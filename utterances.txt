@@ -18,3 +18,8 @@ SetInput switch input to {A. V.|Input} {1…6|Number}
 SetInput switch input to {U. S. B.|Input}
 SetInput switch input to {Audio|Input} {1…2|Number}
 SetInput switch input to {Spotify|Input}
+WhatsTheYams what is the yams
+WhatsTheYams what's the yams
+WhatsTheYams describe the yams
+WhatsTheYams explain the yams
+WhatsTheYams elaborate on the yams

@@ -39,8 +39,13 @@ function onIntent(intentRequest, session, callback) {
     case "SetVolume": return setVolume(intent, session, callback);
     case "SetInput": return setInput(intent, session, callback);
     case "SetPowerState": return setPowerState(intent, session, callback);
+    case "WhatsTheYams": return whatsTheYams(intent, session, callback);
     default: throw 'Invalid intent';
   }
+}
+
+function whatsTheYams(intent, session, callback) {
+  postToServer("/whatstheyams", "", intent.name, callback);
 }
 
 function setPowerState(intent, session, callback) {
@@ -56,13 +61,10 @@ function setPowerState(intent, session, callback) {
 }
 
 function setInput(intent, session, callback) {
+  console.log(JSON.stringify(intent));
   var cardTitle = intent.name;
   var inputSlot = intent.slots.Input.value;
   var numberSlot = intent.slots.Number.value;
-
-  var speechOutput = "Setting input to " + inputSlot;
-
-  if (numberSlot) speechOutput += " " + numberSlot;
 
   var postData = JSON.stringify({
     input: inputSlot,
@@ -76,12 +78,6 @@ function setVolume(intent, session, callback) {
   var cardTitle = intent.name;
   var directionSlot = intent.slots.Direction.value;
   var modifierSlot = intent.slots.Modifier.value;
-
-  if (modifierSlot) {
-    var speechOutput = "Turning volume " + directionSlot + " " + modifierSlot
-  } else {
-    var speechOutput = "Turning volume " + directionSlot;
-  }
 
   var postData = JSON.stringify({
     direction: directionSlot,
@@ -139,8 +135,8 @@ function buildSpeechletResponse(title, output) {
     },
     card: {
       type: "Simple",
-      title: "Yams – " + title,
-      content: "Yams – " + output
+      title: "Yams - " + title,
+      content: "Yams - " + output
     },
     shouldEndSession: true
   };

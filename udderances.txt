@@ -48,6 +48,11 @@ SetInput switch input to {U. S. B.|Input}
 SetInput switch input to {Audio|Input} {one|Number}
 SetInput switch input to {Audio|Input} {two|Number}
 SetInput switch input to {Spotify|Input}
+WhatsTheYams what is the yams
+WhatsTheYams what's the yams
+WhatsTheYams describe the yams
+WhatsTheYams explain the yams
+WhatsTheYams elaborate on the yams
 SetInput switch input to {Auxiliary|Input}
 SetInput switch input to {Chromecast|Input}
 SetInput switch input to {External Hard Drive|Input}
