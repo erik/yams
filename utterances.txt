@@ -1,23 +1,17 @@
-SetVolume turn it {up,down|Direction}
-SetVolume turn {up,down|Direction}
-SetVolume turn {up,down|Direction} the volume
-SetVolume turn it {up,down|Direction} {a lot,a bunch|Modifier}
-SetVolume turn it {way|Modifier} {up,down|Direction}
-SetPowerState turn {on,off|State}
-SetPowerState power {on,off|State}
-SetInput switch to {H. D. M. I.|Input} {1…4|Number}
-SetInput switch to {A. V.|Input} {1…6|Number}
-SetInput switch to {U. S. B.|Input}
-SetInput switch to {Audio|Input} {one,two|Number}
-SetInput switch to {Spotify|Input}
-SetInput switch inputs to {A. V.|Input} {1…6|Number}
-SetInput switch inputs to {U. S. B.|Input}
-SetInput switch inputs to {Audio|Input} {1…2|Number}
-SetInput switch inputs to {Spotify|Input}
-SetInput switch input to {A. V.|Input} {1…6|Number}
-SetInput switch input to {U. S. B.|Input}
-SetInput switch input to {Audio|Input} {1…2|Number}
-SetInput switch input to {Spotify|Input}
+SetVolume turn it {Direction}
+SetVolume turn the volume {Direction}
+SetVolume turn {Direction}
+SetVolume turn {Direction} the volume
+SetVolume turn it {Direction} {Modifier}
+SetVolume turn it {Modifier} {Direction}
+SetPowerState turn {State}
+SetPowerState power {State}
+SetInput switch to {Input}
+SetInput switch to {Input} {Number}
+SetInput switch Inputs to {Input} {Number}
+SetInput switch Inputs to {Input}
+SetInput switch Input to {Input} {Number}
+SetInput switch Input to {Input}
 WhatsTheYams what is the yams
 WhatsTheYams what's the yams
 WhatsTheYams describe the yams

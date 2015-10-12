@@ -1,8 +1,11 @@
-import 'babel-core/polyfill';
-import YamahaAPI from 'yamaha-nodejs';
-import restify from 'restify';
-import {Client} from 'node-ssdp';
-import {mappings} from './utterances';
+'use strict';
+
+var YamahaAPI = require('yamaha-nodejs');
+var restify = require('restify');
+var Client = require('node-ssdp').Client;
+var fs = require('fs');
+
+var mappings = JSON.parse(fs.readFileSync('mappings.json'));
 
 var server = restify.createServer({
   name: 'yams',
